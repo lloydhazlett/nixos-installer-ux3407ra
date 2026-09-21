@@ -107,32 +107,41 @@ Then connect as `nixos@<address>`. If you would rather use a key, append it to
 ## Install NixOS
 
 Partition and format as you prefer — the image ships `parted`, `gptfdisk`,
-`cryptsetup` and the usual `mkfs` tools. Mount the target root at `/mnt` and
-the EFI system partition at `/mnt/boot`, then:
+`cryptsetup` and the usual `mkfs` tools. Partitioning is destructive, and this
+machine normally ships with Windows: identify the internal NVMe and preserve
+any partitions you want to keep.
+
+Mount the target root at `/mnt` and the EFI system partition at `/mnt/boot`.
+Then start from the skeleton configuration in [`skeleton/`](skeleton), which
+is a minimal system that boots this hardware:
 
 ```console
-sudo nixos-generate-config --root /mnt
-sudo nixos-install --root /mnt
+sudo mkdir -p /mnt/etc/nixos && cd /mnt/etc/nixos
+sudo nix flake init -t github:lloydhazlett/nixos-installer-ux3407ra --refresh
 ```
 
-Partitioning is destructive, and this machine normally ships with Windows.
-Identify the internal NVMe and preserve any partitions you want to keep.
+Edit `configuration.nix` (hostname, user, locale, timezone), `filesystems.nix`
+(to match your partitions) and the hostname in `flake.nix`, then:
 
-Your installed configuration needs the same hardware workarounds this image
-uses, or it will not boot. At minimum:
+```console
+sudo nixos-install --root /mnt --flake /mnt/etc/nixos#zenbook
+```
 
-- the Ubuntu Concept kernel from [`packages/ubuntu-x1e-kernel.nix`](packages/ubuntu-x1e-kernel.nix),
-  with `hardware.deviceTree.enable = false`;
-- the initrd module list from [`installer.nix`](installer.nix), including
-  `fixed` and `phy_nxp_ptn3222`;
-- `boot.kernelParams` containing `efi=noruntime`,
-  `module_blacklist=dispcc_x1e80100` and `regulator_ignore_unused`;
-- GRUB rather than systemd-boot, with `efiInstallAsRemovable = true`,
-  `canTouchEfiVariables = false`, and the `cutmem` line above in
-  `boot.loader.grub.extraConfig`.
+See [`skeleton/README.md`](skeleton/README.md) for what is in it and what to
+change. **Do not run `nixos-generate-config` over the top of it** — it cannot
+detect the device tree, kernel or module closure this machine needs, and its
+output will replace exactly the settings that make it boot.
 
-`efi=noruntime` means the install cannot write EFI variables, so GRUB is
-installed to the removable-media fallback path `EFI/BOOT/BOOTAA64.EFI`.
+If you would rather write your own configuration, it needs the same
+workarounds this image uses or it will not boot. At minimum: the Ubuntu
+Concept kernel with `hardware.deviceTree.enable = false`; the initrd module
+list including `fixed` and `phy_nxp_ptn3222`; `efi=noruntime`,
+`module_blacklist=dispcc_x1e80100` and `regulator_ignore_unused` in
+`boot.kernelParams`; and GRUB rather than systemd-boot, with
+`efiInstallAsRemovable = true`, `canTouchEfiVariables = false` and the
+`cutmem` line above in `boot.loader.grub.extraConfig`. `efi=noruntime` means
+the install cannot write EFI variables, so GRUB goes to the removable-media
+fallback path `EFI/BOOT/BOOTAA64.EFI`.
 
 ## Notes
 

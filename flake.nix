@@ -110,5 +110,12 @@
         default = installer-iso;
         inherit installer-iso;
       };
+
+      # A minimal configuration that boots this machine, to start an install
+      # from once the image is up: nix flake init -t github:<owner>/<repo>
+      templates.default = {
+        description = "Minimal NixOS configuration for the ASUS Zenbook A14 (UX3407RA)";
+        path = ./skeleton;
+      };
     };
 }
