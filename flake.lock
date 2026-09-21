@@ -1,0 +1,66 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1789885152,
+        "narHash": "sha256-mDNo95riUw8k0MA2Btzj/OuiMcfLKofqIliLYsLbrSY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6d663c0533ff269008fb84e45930151e37c99db9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-installer": {
+      "locked": {
+        "lastModified": 1783695355,
+        "narHash": "sha256-Ym59vrupl/ulyyrb9O8XBkIxsUtNbj7b5mnFTzOdEAI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "c71d88ec038d9c37b55b414d1c2d49f786592604",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "c71d88ec038d9c37b55b414d1c2d49f786592604",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-installer": "nixpkgs-installer",
+        "x1e-installer": "x1e-installer"
+      }
+    },
+    "x1e-installer": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-installer"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783702999,
+        "narHash": "sha256-pgowT0f5IxelpNeV9gmqberh0odhPKpQVHc3PoC1KWE=",
+        "owner": "kuruczgy",
+        "repo": "x1e-nixos-config",
+        "rev": "14f28d2791781570ee125659353df04a13ddb25f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kuruczgy",
+        "repo": "x1e-nixos-config",
+        "rev": "14f28d2791781570ee125659353df04a13ddb25f",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
