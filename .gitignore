@@ -1,2 +1,6 @@
 result
 result-*
+
+# Staging directory for release assets: the ISO, its corresponding source and
+# SHA256SUMS. Built and uploaded, never committed.
+/release/
